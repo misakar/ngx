@@ -1,0 +1,4 @@
+**/*.pyc
+**/*.pyo
+ngvenv/
+ng_site/__pycache__/

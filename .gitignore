@@ -1,4 +1,5 @@
 **/*.pyc
 **/*.pyo
+learn/
 ngvenv/
 ng_site/__pycache__/

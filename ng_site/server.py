@@ -1,22 +1,21 @@
+import json
 import asyncio
+import websockets
+from config import host, port
 
 from config import nginx_log_file_path
 from tail_f import tail_f
 from handle import handle
 
+async def handle_server(websocket, path):
+    logfile = open(nginx_log_file_path)
+    lines = tail_f(logfile)
+    log_dicts = handle(lines)
 
-logfile = open(nginx_log_file_path)
-lines = tail_f(logfile)
-log_dicts = handle(lines)
+    for log_dict in log_dicts:
+        await websocket.send(str(log_dict))
 
-def show():
-    yield log_dicts
+start_server = websockets.serve(handle_server, host, int(port))
 
-# event_loop = asyncio.get_event_loop()
-# try:
-#     event_loop.run_until_complete(show())
-# finally:
-#     event_loop.close()
-# show()
-for log_dict in log_dicts:
-    print(log_dict)
+asyncio.get_event_loop().run_until_complete(start_server)
+asyncio.get_event_loop().run_forever()

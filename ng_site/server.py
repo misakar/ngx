@@ -2,14 +2,13 @@ import json
 import asyncio
 import websockets
 from config import host, port
-from types import coroutine
 
 from config import nginx_log_file_path
 from tail_f import tail_f
 from handle import handle
 
 # async def handle_server(websocket, path):
-@coroutine
+@asyncio.coroutine
 def handle_server(websocket, path):
     logfile = open(nginx_log_file_path)
     lines = tail_f(logfile)
